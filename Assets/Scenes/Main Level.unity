@@ -270,6 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43651f691b25bc243b39603bf9251862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  losePanel: {fileID: 950953434}
   timer: 10
 --- !u!1 &519420028
 GameObject:
@@ -375,7 +376,7 @@ GameObject:
   - component: {fileID: 950953437}
   - component: {fileID: 950953436}
   m_Layer: 5
-  m_Name: You Lose
+  m_Name: Lose Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
