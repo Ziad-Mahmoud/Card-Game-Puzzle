@@ -10,6 +10,11 @@ public class LevelManager : MonoBehaviour
     [SerializeField] GameObject winPanel , losePanel;
 
     public static int level = 1;
+    public static int trials = 5;
+    private void Awake()
+    {
+        
+    }
     void Start()
     {
         win.AddListener(WinHandler);
@@ -23,10 +28,12 @@ public class LevelManager : MonoBehaviour
     {
         winPanel.SetActive(true);
         FindObjectOfType<Timer>().gameObject.SetActive(false);
+        AdsManager.ShowInterstitial();
     }
     void LoseHandler()
     {
         losePanel.SetActive(true);
+        AdsManager.ShowInterstitial();
     }
 
     void NextLevel()
