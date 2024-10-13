@@ -1,20 +1,24 @@
+using System;
 using TMPro;
 using UnityEngine;
 public class Timer : MonoBehaviour
 {
-    public GameObject losePanel;
-    public float timer = 10;
+    public TimeSpan timeAllowed;
+    DateTime startTime;
     TextMeshProUGUI timerText;
     private void Awake()
     {
         timerText = GetComponent<TextMeshProUGUI>();
+        timeAllowed = TimeSpan.FromSeconds(7 + LevelManager.level * 3) ;
+        startTime = DateTime.Now;
     }
     void Update()
     {
-        timerText.text = ((int)(timer - Time.time)).ToString();
-        if (Time.time >= timer)
+        var timePassed = DateTime.Now - startTime;
+        timerText.text = (timeAllowed - timePassed).ToString("ss");
+        if (timePassed > timeAllowed)
         {
-            losePanel.SetActive(true);
+            LevelManager.lose.Invoke();
             gameObject.SetActive(false);
         }
     }

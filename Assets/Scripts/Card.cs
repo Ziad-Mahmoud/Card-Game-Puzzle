@@ -33,6 +33,14 @@ public class Card : MonoBehaviour
             {
                 hit = true;
                 cards[lastIndex].hit = true;
+
+                bool win = true;
+                foreach (var card in cards)
+                    if (!card.hit)
+                        win = false;
+                if (win)
+                    LevelManager.win.Invoke();
+
                 lastId = -1;
                 lastIndex = -1;
             }

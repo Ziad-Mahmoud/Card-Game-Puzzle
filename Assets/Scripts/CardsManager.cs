@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 public class CardsManager : MonoBehaviour
 {
@@ -6,20 +7,33 @@ public class CardsManager : MonoBehaviour
     public static Sprite cardBack;
     public static int lastId = -1;
     public static int lastIndex = -1;
+
     // global scope
     void Start()
     {
         // local variable 
-        sprites = Resources.LoadAll<Sprite>("Sprites");
+        var temp = Resources.LoadAll<Sprite>("Sprites");
+        sprites = temp[..(LevelManager.level+1)];
         cardBack = Resources.Load<Sprite>("CardBack");
         cards = new Card[sprites.Length * 2];
         var cardPrefab = Resources.Load<GameObject>("Prefabs/Card");
         var parent = GameObject.Find("Cards Group");
 
+        List<int> ints = new();
+        for (int i = 0; i < cards.Length; i++)
+            ints.Add(i);
+        List<int> shuffled = new();
+        while (ints.Count > 0)
+        {
+            int index = Random.Range(0, ints.Count);
+            shuffled.Add(ints[index]);
+            ints.RemoveAt(index);
+        }
+        
         for (int i = 0; i < cards.Length; i++)
         {
             var obj = Instantiate(cardPrefab, parent.transform);
-            int id = i % sprites.Length;
+            int id = shuffled[i] % sprites.Length;
             var card = obj.GetComponent<Card>();
             card.FlipToBack();
             card.id = id;
