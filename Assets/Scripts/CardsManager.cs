@@ -11,9 +11,13 @@ public class CardsManager : MonoBehaviour
     // global scope
     void Start()
     {
-        // local variable 
+        if(FindObjectOfType<LevelManager>().UseTry())
+            StartGame();
+    }
+    void StartGame()
+    {
         var temp = Resources.LoadAll<Sprite>("Sprites");
-        sprites = temp[..(LevelManager.level+1)];
+        sprites = temp[..(LevelManager.level + 1)];
         cardBack = Resources.Load<Sprite>("CardBack");
         cards = new Card[sprites.Length * 2];
         var cardPrefab = Resources.Load<GameObject>("Prefabs/Card");
@@ -29,7 +33,7 @@ public class CardsManager : MonoBehaviour
             shuffled.Add(ints[index]);
             ints.RemoveAt(index);
         }
-        
+
         for (int i = 0; i < cards.Length; i++)
         {
             var obj = Instantiate(cardPrefab, parent.transform);

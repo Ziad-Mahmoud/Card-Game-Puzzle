@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 1409835260}
   losePanel: {fileID: 950953434}
+  trialsText: {fileID: 1728181302}
 --- !u!4 &47366808
 Transform:
   m_ObjectHideFlags: 0
