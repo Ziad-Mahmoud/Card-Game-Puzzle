@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEngine.ParticleSystem;
 public class LevelManager : MonoBehaviour
 {
     public static UnityEvent win = new();
@@ -11,15 +10,18 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] GameObject winPanel , losePanel;
     [SerializeField] TextMeshProUGUI trialsText;
+    [SerializeField] TextMeshProUGUI levelsText;
 
     public static int level = 1;
-    public static int trials = 5;
+    public static int trials = 500;
     private void Awake()
     {
-        trials = PlayerPrefs.GetInt("trials");
+        level = PlayerPrefs.GetInt("level");
+        //trials = PlayerPrefs.GetInt("trials");
     }
     void Start()
     {
+        levelsText.text = "Level : " + level;
         win.AddListener(WinHandler);
         lose.AddListener(LoseHandler);
 
@@ -42,6 +44,7 @@ public class LevelManager : MonoBehaviour
     void NextLevel()
     {
         level++;
+        PlayerPrefs.SetInt("level",level);
         Retry();
     }
     void Retry()

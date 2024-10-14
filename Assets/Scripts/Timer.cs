@@ -9,13 +9,22 @@ public class Timer : MonoBehaviour
     private void Awake()
     {
         timerText = GetComponent<TextMeshProUGUI>();
-        timeAllowed = TimeSpan.FromSeconds(7 + LevelManager.level * 3) ;
+        int levelTime = 300;
+        if (LevelManager.level < 11)
+            levelTime = 60;
+        else if (LevelManager.level < 21)
+            levelTime = 120;
+        else if (LevelManager.level < 31)
+            levelTime = 200;
+        else if (LevelManager.level < 41)
+            levelTime = 250;
+        timeAllowed = TimeSpan.FromSeconds(levelTime) ;
         startTime = DateTime.Now;
     }
     void Update()
     {
         var timePassed = DateTime.Now - startTime;
-        timerText.text = (timeAllowed - timePassed).ToString("ss");
+        timerText.text = ((int)(timeAllowed - timePassed).TotalSeconds).ToString();
         if (timePassed > timeAllowed)
         {
             LevelManager.lose.Invoke();

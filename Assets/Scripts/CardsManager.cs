@@ -17,7 +17,10 @@ public class CardsManager : MonoBehaviour
     void StartGame()
     {
         var temp = Resources.LoadAll<Sprite>("Sprites");
-        sprites = temp[..(LevelManager.level + 1)];
+        int cardsCount = LevelManager.level + 1;
+        if (cardsCount > 49)
+            cardsCount = 49;
+        sprites = temp[..cardsCount];
         cardBack = Resources.Load<Sprite>("CardBack");
         cards = new Card[sprites.Length * 2];
         var cardPrefab = Resources.Load<GameObject>("Prefabs/Card");
