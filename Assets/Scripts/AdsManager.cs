@@ -9,6 +9,8 @@ public class AdsManager : MonoBehaviour
     public static InterstitialAd _interstitialAd;
     public static RewardedAd _rewardedAd;
     public static RewardedInterstitialAd _rewardedInterstitialAd;
+
+    [SerializeField] LevelManager levelManager;
     void Start()
     {
         MobileAds.Initialize(initStatus => { });
@@ -30,9 +32,12 @@ public class AdsManager : MonoBehaviour
               _interstitialAd = ad;
           });
     }
-    public static void ShowInterstitial()
+    public void ShowInterstitial()
     {
         if(_interstitialAd != null && _interstitialAd.CanShowAd())
+        {
+            levelManager.AddHeart();
             _interstitialAd.Show();
+        }
     }
 }

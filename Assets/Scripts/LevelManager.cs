@@ -8,15 +8,25 @@ public class LevelManager : MonoBehaviour
     public static UnityEvent win = new();
     public static UnityEvent lose = new();
 
+    [SerializeField] Button startGame;
     [SerializeField] GameObject winPanel , losePanel;
     [SerializeField] TextMeshProUGUI trialsText;
     [SerializeField] TextMeshProUGUI levelsText;
+
+    [SerializeField] AdsManager adsManager;
 
     public static int level = 1;
     public static int trials = 500;
     private void Awake()
     {
         level = PlayerPrefs.GetInt("level");
+        if (level == 0)
+            level = 1;
+        if(level != 1)
+        {
+            startGame.gameObject.SetActive(false);
+            startGame.onClick.Invoke();
+        }
         //trials = PlayerPrefs.GetInt("trials");
     }
     void Start()
@@ -33,12 +43,12 @@ public class LevelManager : MonoBehaviour
     {
         winPanel.SetActive(true);
         FindObjectOfType<Timer>().gameObject.SetActive(false);
-        AdsManager.ShowInterstitial();
+        adsManager.ShowInterstitial();
     }
     void LoseHandler()
     {
         losePanel.SetActive(true);
-        AdsManager.ShowInterstitial();
+        adsManager.ShowInterstitial();
     }
 
     void NextLevel()
@@ -59,9 +69,15 @@ public class LevelManager : MonoBehaviour
             myReturn = true;
             trials--;
         }
-        PlayerPrefs.SetInt("trials", LevelManager.trials);
+        PlayerPrefs.SetInt("trials", trials);
 
         trialsText.text = trials.ToString();
         return myReturn;
+    }
+    public void AddHeart()
+    {
+        trials++;
+        PlayerPrefs.SetInt("trials", trials);
+        trialsText.text = trials.ToString();
     }
 }
