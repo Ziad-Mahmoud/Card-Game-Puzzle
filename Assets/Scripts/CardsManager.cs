@@ -8,6 +8,8 @@ public class CardsManager : MonoBehaviour
     public static int lastId = -1;
     public static int lastIndex = -1;
 
+    [SerializeField] SoundManager soundManager;
+
     // global scope
     void Start()
     {
@@ -16,7 +18,10 @@ public class CardsManager : MonoBehaviour
     }
     void StartGame()
     {
-        var temp = Resources.LoadAll<Sprite>("Sprites");
+        string path = "Sprites";
+        if (LevelManager.level >= 95)
+            path = "Arrow";
+        var temp = Resources.LoadAll<Sprite>(path);
         int cardsCount = LevelManager.level + 1;
         if (cardsCount > 49)
             cardsCount = 49;
@@ -46,6 +51,7 @@ public class CardsManager : MonoBehaviour
             card.id = id;
             card.index = i;
             cards[i] = card;
+            card.button.onClick.AddListener(soundManager.CardClick);
         }
     }
 }

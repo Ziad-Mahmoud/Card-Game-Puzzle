@@ -4,7 +4,7 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
     public TimeSpan timeAllowed;
-    DateTime startTime;
+    public DateTime startTime;
     TextMeshProUGUI timerText;
     private void Awake()
     {

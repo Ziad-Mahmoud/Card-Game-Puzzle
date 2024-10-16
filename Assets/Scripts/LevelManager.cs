@@ -9,44 +9,58 @@ public class LevelManager : MonoBehaviour
     public static UnityEvent lose = new();
 
     [SerializeField] Button startGame;
-    [SerializeField] GameObject winPanel , losePanel;
-    [SerializeField] TextMeshProUGUI trialsText;
-    [SerializeField] TextMeshProUGUI levelsText;
+    [SerializeField] GameObject winPanel , losePanel, finishPanel;
+    [SerializeField] TextMeshProUGUI trialsText, levelsText, codeText;
 
     [SerializeField] AdsManager adsManager;
+    [SerializeField] SoundManager soundManager;
 
     public static int level = 1;
-    public static int trials = 500;
+    public static int trials = 5;
+
+    static bool firstStart = true;
     private void Awake()
     {
         level = PlayerPrefs.GetInt("level");
         if (level == 0)
             level = 1;
-        if(level != 1)
+        if(!firstStart)
         {
             startGame.gameObject.SetActive(false);
             startGame.onClick.Invoke();
         }
-        //trials = PlayerPrefs.GetInt("trials");
+        firstStart = false;
+        trials = PlayerPrefs.GetInt("trials");
     }
     void Start()
     {
         levelsText.text = "Level : " + level;
-        win.AddListener(WinHandler);
+        win.AddListener(WinHandlerDelayed);
         lose.AddListener(LoseHandler);
 
         winPanel.GetComponentInChildren<Button>(true).onClick.AddListener(NextLevel);
         losePanel.GetComponentInChildren<Button>(true).onClick.AddListener(Retry);
     }
-
+    void WinHandlerDelayed()
+    {
+        Invoke(nameof(WinHandler), 1);
+    }
     void WinHandler()
     {
-        winPanel.SetActive(true);
+        soundManager.WinSound();
+        if (level == 100)
+        {
+            finishPanel.SetActive(true);
+            codeText.text = Random.Range(100000000, 999999999).ToString();
+        }
+        else
+            winPanel.SetActive(true);
         FindObjectOfType<Timer>().gameObject.SetActive(false);
         adsManager.ShowInterstitial();
     }
     void LoseHandler()
     {
+        soundManager.LoseSound();
         losePanel.SetActive(true);
         adsManager.ShowInterstitial();
     }
@@ -57,14 +71,14 @@ public class LevelManager : MonoBehaviour
         PlayerPrefs.SetInt("level",level);
         Retry();
     }
-    void Retry()
+    public void Retry()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public bool UseTry()
     {
         bool myReturn = false;
-        if (trials > 1)
+        if (trials > 0)
         {
             myReturn = true;
             trials--;
