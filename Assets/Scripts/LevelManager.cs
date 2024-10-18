@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using static UnityEngine.PlayerPrefs;
 public class LevelManager : MonoBehaviour
 {
     public static UnityEvent win = new();
@@ -21,7 +22,7 @@ public class LevelManager : MonoBehaviour
     static bool firstStart = true;
     private void Awake()
     {
-        level = PlayerPrefs.GetInt("level");
+        level = GetInt("level");
         if (level == 0)
             level = 1;
         if(!firstStart)
@@ -30,7 +31,8 @@ public class LevelManager : MonoBehaviour
             startGame.onClick.Invoke();
         }
         firstStart = false;
-        trials = PlayerPrefs.GetInt("trials");
+        if(HasKey("trials"))
+            trials = GetInt("trials");
     }
     void Start()
     {
