@@ -1,0 +1,8 @@
+E:/Memory Puzzle/.utmp/RelWithDebInfo/6v4t2u2l/arm64-v8a/CMakeFiles/edit_cache.dir
+E:/Memory Puzzle/.utmp/RelWithDebInfo/6v4t2u2l/arm64-v8a/CMakeFiles/rebuild_cache.dir
+E:/Memory Puzzle/.utmp/RelWithDebInfo/6v4t2u2l/arm64-v8a/GameActivity/CMakeFiles/game.dir
+E:/Memory Puzzle/.utmp/RelWithDebInfo/6v4t2u2l/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+E:/Memory Puzzle/.utmp/RelWithDebInfo/6v4t2u2l/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
+E:/Memory Puzzle/.utmp/RelWithDebInfo/6v4t2u2l/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+E:/Memory Puzzle/.utmp/RelWithDebInfo/6v4t2u2l/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+E:/Memory Puzzle/.utmp/RelWithDebInfo/6v4t2u2l/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir

@@ -13,7 +13,6 @@ public class CardsGroup : MonoBehaviour
     [SerializeField] Level[] levels;
     void Start()
     {
-        var rect = GetComponent<RectTransform>();
         var grid = GetComponent<GridLayoutGroup>();
         int index = levels.Length - 1;
         if (LevelManager.level < 12)

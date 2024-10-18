@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using static UnityEngine.PlayerPrefs;
 public class LevelManager : MonoBehaviour
@@ -9,7 +9,7 @@ public class LevelManager : MonoBehaviour
     public static UnityEvent win = new();
     public static UnityEvent lose = new();
 
-    [SerializeField] Button startGame;
+    [SerializeField] Button startGame, retry, nextLevel;
     [SerializeField] GameObject winPanel , losePanel, finishPanel;
     [SerializeField] TextMeshProUGUI trialsText, levelsText, codeText;
 
@@ -22,16 +22,15 @@ public class LevelManager : MonoBehaviour
     static bool firstStart = true;
     private void Awake()
     {
-        level = GetInt("level");
-        if (level == 0)
-            level = 1;
+        if (HasKey("level"))
+            level = GetInt("level");
         if(!firstStart)
         {
             startGame.gameObject.SetActive(false);
             startGame.onClick.Invoke();
         }
         firstStart = false;
-        if(HasKey("trials"))
+        if (HasKey("trials"))
             trials = GetInt("trials");
     }
     void Start()
@@ -40,8 +39,8 @@ public class LevelManager : MonoBehaviour
         win.AddListener(WinHandlerDelayed);
         lose.AddListener(LoseHandler);
 
-        winPanel.GetComponentInChildren<Button>(true).onClick.AddListener(NextLevel);
-        losePanel.GetComponentInChildren<Button>(true).onClick.AddListener(Retry);
+        nextLevel.onClick.AddListener(NextLevel);
+        retry.onClick.AddListener(Retry);
     }
     void WinHandlerDelayed()
     {
@@ -57,11 +56,13 @@ public class LevelManager : MonoBehaviour
         }
         else
             winPanel.SetActive(true);
-        FindObjectOfType<Timer>().gameObject.SetActive(false);
+        FindFirstObjectByType<Timer>().gameObject.SetActive(false);
         adsManager.ShowInterstitial();
     }
     void LoseHandler()
     {
+        if (Timer.gameEnd) return;
+        Timer.gameEnd = true;
         soundManager.LoseSound();
         losePanel.SetActive(true);
         adsManager.ShowInterstitial();
@@ -70,7 +71,7 @@ public class LevelManager : MonoBehaviour
     void NextLevel()
     {
         level++;
-        PlayerPrefs.SetInt("level",level);
+        SetInt("level",level);
         Retry();
     }
     public void Retry()
@@ -85,7 +86,7 @@ public class LevelManager : MonoBehaviour
             myReturn = true;
             trials--;
         }
-        PlayerPrefs.SetInt("trials", trials);
+        SetInt("trials", trials);
 
         trialsText.text = trials.ToString();
         return myReturn;
@@ -93,7 +94,7 @@ public class LevelManager : MonoBehaviour
     public void AddHeart()
     {
         trials++;
-        PlayerPrefs.SetInt("trials", trials);
+        SetInt("trials", trials);
         trialsText.text = trials.ToString();
     }
 }

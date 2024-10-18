@@ -6,9 +6,11 @@ public class Timer : MonoBehaviour
     public TimeSpan timeAllowed;
     public DateTime startTime;
     TextMeshProUGUI timerText;
+    public static bool gameEnd = false;
     private void Awake()
     {
         timerText = GetComponent<TextMeshProUGUI>();
+        gameEnd = false;
         int levelTime = 300;
         if (LevelManager.level < 11)
             levelTime = 60;
@@ -30,5 +32,10 @@ public class Timer : MonoBehaviour
             LevelManager.lose.Invoke();
             gameObject.SetActive(false);
         }
+    }
+    public void Activate()
+    {
+        gameEnd = false;
+        gameObject.SetActive(true);
     }
 }

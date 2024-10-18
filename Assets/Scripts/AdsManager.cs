@@ -14,6 +14,8 @@ public class AdsManager : MonoBehaviour
     [SerializeField] LevelManager levelManager;
     [SerializeField] Timer timer;
     [SerializeField] GameObject losePanel;
+
+    public int adCounter = 1;
     void Start()
     {
         MobileAds.Initialize(initStatus => { });
@@ -40,10 +42,7 @@ public class AdsManager : MonoBehaviour
     public void ShowInterstitial()
     {
         if(_interstitialAd != null && _interstitialAd.CanShowAd())
-        {
             _interstitialAd.Show();
-            levelManager.AddHeart();
-        }
     }
     public void LoadRewarded()
     {
@@ -63,9 +62,11 @@ public class AdsManager : MonoBehaviour
     }
     public void ShowRewarded(bool heart = true)
     {
-        if (!heart && LevelManager.level > 95) return;
+        if (!heart && LevelManager.level > 95)
+            if(adCounter > 10)
+                return;
 
-        if (_rewardedAd != null && _rewardedAd.CanShowAd())
+        if (_rewardedAd != null && _rewardedAd.CanShowAd()) 
             _rewardedAd.Show((e) => Reward(heart));
         else if (_rewardedInterstitialAd != null && _rewardedInterstitialAd.CanShowAd())
             _rewardedInterstitialAd.Show((e) => Reward(heart));
@@ -97,6 +98,8 @@ public class AdsManager : MonoBehaviour
             levelManager.AddHeart();
         else
         {
+            adCounter++;
+            timer.Activate();
             timer.timeAllowed = TimeSpan.FromSeconds(10);
             timer.startTime = DateTime.Now;
             losePanel.SetActive(false);

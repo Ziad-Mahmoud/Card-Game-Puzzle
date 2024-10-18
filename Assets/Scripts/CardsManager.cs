@@ -7,13 +7,10 @@ public class CardsManager : MonoBehaviour
     public static Sprite cardBack;
     public static int lastId = -1;
     public static int lastIndex = -1;
-
     [SerializeField] SoundManager soundManager;
-
-    // global scope
     void Start()
     {
-        if(FindObjectOfType<LevelManager>().UseTry())
+        if(FindFirstObjectByType<LevelManager>().UseTry())
             StartGame();
     }
     void StartGame()
