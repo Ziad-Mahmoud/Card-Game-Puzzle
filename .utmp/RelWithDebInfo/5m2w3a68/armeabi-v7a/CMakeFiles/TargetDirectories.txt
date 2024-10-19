@@ -1,0 +1,8 @@
+E:/GitHub/Card-Game-Puzzle/.utmp/RelWithDebInfo/5m2w3a68/armeabi-v7a/CMakeFiles/edit_cache.dir
+E:/GitHub/Card-Game-Puzzle/.utmp/RelWithDebInfo/5m2w3a68/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+E:/GitHub/Card-Game-Puzzle/.utmp/RelWithDebInfo/5m2w3a68/armeabi-v7a/GameActivity/CMakeFiles/game.dir
+E:/GitHub/Card-Game-Puzzle/.utmp/RelWithDebInfo/5m2w3a68/armeabi-v7a/GameActivity/CMakeFiles/edit_cache.dir
+E:/GitHub/Card-Game-Puzzle/.utmp/RelWithDebInfo/5m2w3a68/armeabi-v7a/GameActivity/CMakeFiles/rebuild_cache.dir
+E:/GitHub/Card-Game-Puzzle/.utmp/RelWithDebInfo/5m2w3a68/armeabi-v7a/FramePacing/CMakeFiles/swappywrapper.dir
+E:/GitHub/Card-Game-Puzzle/.utmp/RelWithDebInfo/5m2w3a68/armeabi-v7a/FramePacing/CMakeFiles/edit_cache.dir
+E:/GitHub/Card-Game-Puzzle/.utmp/RelWithDebInfo/5m2w3a68/armeabi-v7a/FramePacing/CMakeFiles/rebuild_cache.dir

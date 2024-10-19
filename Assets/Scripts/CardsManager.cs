@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 public class CardsManager : MonoBehaviour
 {
     public static Card[] cards;
@@ -8,10 +9,30 @@ public class CardsManager : MonoBehaviour
     public static int lastId = -1;
     public static int lastIndex = -1;
     [SerializeField] SoundManager soundManager;
-    void Start()
+    [SerializeField] Button watchAd, startBtn;
+    [SerializeField] GameObject watchAdPanel, timer, startGame;
+    void Awake()
     {
-        if(FindFirstObjectByType<LevelManager>().UseTry())
+        startBtn.onClick.AddListener(TryHeartStartGame);
+    }
+    public void TryHeartStartGame()
+    {
+        if (FindFirstObjectByType<LevelManager>().UseTry())
+        {
             StartGame();
+            startGame.SetActive(false);
+            timer.SetActive(true);
+            LevelManager.firstStart = false;
+        }
+        else
+        {
+            watchAdPanel.SetActive(true);
+            watchAd.onClick.AddListener(() =>
+            {
+                watchAdPanel.SetActive(false);
+                LevelManager.firstStart = true;
+            });
+        }
     }
     void StartGame()
     {

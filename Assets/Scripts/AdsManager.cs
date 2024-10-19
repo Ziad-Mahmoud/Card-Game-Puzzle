@@ -1,6 +1,7 @@
 using GoogleMobileAds.Api;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 public class AdsManager : MonoBehaviour
 {
     private string _InterstitialUnitId = "ca-app-pub-4985704153931149/9141882130";
@@ -14,14 +15,14 @@ public class AdsManager : MonoBehaviour
     [SerializeField] LevelManager levelManager;
     [SerializeField] Timer timer;
     [SerializeField] GameObject losePanel;
-
+    [SerializeField] Button watchAd;
     public int adCounter = 1;
     void Start()
     {
         MobileAds.Initialize(initStatus => { });
         LoadInterstitial();
         LoadRewarded();
-        LoadRewardedInterstitial();
+        watchAd.onClick.AddListener(() => ShowRewarded() );
     }
     public void LoadInterstitial()
     {
@@ -56,7 +57,10 @@ public class AdsManager : MonoBehaviour
           (RewardedAd ad, LoadAdError error) =>
           {
               if (error != null || ad == null)
+              {
+                  LoadRewardedInterstitial();
                   return;
+              }
               _rewardedAd = ad;
           });
     }
@@ -67,13 +71,23 @@ public class AdsManager : MonoBehaviour
                 return;
 
         if (_rewardedAd != null && _rewardedAd.CanShowAd()) 
-            _rewardedAd.Show((e) => Reward(heart));
+            _rewardedAd.Show((e) => 
+            {
+                Reward(heart);
+                LoadRewarded();
+            });
         else if (_rewardedInterstitialAd != null && _rewardedInterstitialAd.CanShowAd())
-            _rewardedInterstitialAd.Show((e) => Reward(heart));
+            _rewardedInterstitialAd.Show((e) =>
+            {
+                Reward(heart);
+                LoadRewarded();
+            });
         else if (_interstitialAd != null && _interstitialAd.CanShowAd())
         {
             _interstitialAd.Show();
             Reward(heart);
+            LoadRewarded();
+            LoadInterstitial();
         }
     }
     public void LoadRewardedInterstitial()
@@ -88,7 +102,10 @@ public class AdsManager : MonoBehaviour
           (RewardedInterstitialAd ad, LoadAdError error) =>
           {
               if (error != null || ad == null)
+              {
+                  LoadInterstitial();
                   return;
+              }
               _rewardedInterstitialAd = ad;
           });
     }

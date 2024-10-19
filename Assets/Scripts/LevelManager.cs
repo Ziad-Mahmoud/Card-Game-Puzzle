@@ -18,29 +18,27 @@ public class LevelManager : MonoBehaviour
 
     public static int level = 1;
     public static int trials = 5;
-
-    static bool firstStart = true;
+    public static bool firstStart = true;
     private void Awake()
     {
         if (HasKey("level"))
             level = GetInt("level");
-        if(!firstStart)
-        {
-            startGame.gameObject.SetActive(false);
-            startGame.onClick.Invoke();
-        }
-        firstStart = false;
+        levelsText.text = "Level : " + level;
         if (HasKey("trials"))
             trials = GetInt("trials");
+        trialsText.text = trials.ToString();
     }
     void Start()
     {
-        levelsText.text = "Level : " + level;
         win.AddListener(WinHandlerDelayed);
         lose.AddListener(LoseHandler);
 
         nextLevel.onClick.AddListener(NextLevel);
         retry.onClick.AddListener(Retry);
+
+        if (!firstStart)
+            startGame.onClick.Invoke();
+        firstStart = false;
     }
     void WinHandlerDelayed()
     {
