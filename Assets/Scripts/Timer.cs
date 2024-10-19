@@ -11,7 +11,7 @@ public class Timer : MonoBehaviour
     {
         timerText = GetComponent<TextMeshProUGUI>();
         gameEnd = false;
-        int levelTime = 300;
+        int levelTime = 9999;
         if (LevelManager.level < 11)
             levelTime = 60;
         else if (LevelManager.level < 21)

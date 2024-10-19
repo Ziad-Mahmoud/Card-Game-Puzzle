@@ -117,7 +117,7 @@ public class AdsManager : MonoBehaviour
         {
             adCounter++;
             timer.Activate();
-            timer.timeAllowed = TimeSpan.FromSeconds(10);
+            timer.timeAllowed = TimeSpan.FromSeconds(15);
             timer.startTime = DateTime.Now;
             losePanel.SetActive(false);
         }
