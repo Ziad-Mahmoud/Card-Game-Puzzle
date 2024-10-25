@@ -6,7 +6,10 @@ public class Timer : MonoBehaviour
     public TimeSpan timeAllowed;
     public DateTime startTime;
     TextMeshProUGUI timerText;
+    int adCounter = 0;
+    [SerializeField] GameObject losePanel;
     public static bool gameEnd = false;
+    public static bool watchedAdTimer = false;
     private void Awake()
     {
         timerText = GetComponent<TextMeshProUGUI>();
@@ -25,6 +28,16 @@ public class Timer : MonoBehaviour
     }
     void Update()
     {
+        if (watchedAdTimer && (adCounter < 10 || LevelManager.level < 96))
+        {
+            adCounter++;
+            Activate();
+            timeAllowed = TimeSpan.FromSeconds(15);
+            startTime = DateTime.Now;
+            losePanel.SetActive(false);
+            watchedAdTimer = false;
+        }
+
         var timePassed = DateTime.Now - startTime;
         timerText.text = ((int)(timeAllowed - timePassed).TotalSeconds).ToString();
         if (timePassed > timeAllowed)

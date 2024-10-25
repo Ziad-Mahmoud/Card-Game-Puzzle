@@ -1,125 +1,100 @@
 using GoogleMobileAds.Api;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class AdsManager : MonoBehaviour
 {
-    private string _InterstitialUnitId = "ca-app-pub-4985704153931149/9141882130";
-    private string _RewardedUnitId = "ca-app-pub-4985704153931149/4397592420";
-    private string _RewardedInterstitialUnitId = "ca-app-pub-4985704153931149/1995726146";
+    private readonly string _InterstitialUnitId = "ca-app-pub-4985704153931149/9141882130";
+    private readonly string _RewardedUnitId = "ca-app-pub-4985704153931149/4397592420";
+    private readonly string _RewardedInterstitialUnitId = "ca-app-pub-4985704153931149/1995726146";
 
-    public static InterstitialAd _interstitialAd;
-    public static RewardedAd _rewardedAd;
-    public static RewardedInterstitialAd _rewardedInterstitialAd;
-
-    [SerializeField] LevelManager levelManager;
-    [SerializeField] Timer timer;
-    [SerializeField] GameObject losePanel;
-    [SerializeField] Button watchAd;
+    [SerializeField] Button watchAd, watchRewardedTimer, addHearts;
+    [SerializeField] GameObject timer;
+    Button[] btns;
     public int adCounter = 1;
+    bool adShown = false;
+    bool adTimerShown = false;
+    void Awake()
+    {
+        btns = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+    }
     void Start()
     {
         MobileAds.Initialize(initStatus => { });
-        LoadInterstitial();
-        LoadRewarded();
-        watchAd.onClick.AddListener(() => ShowRewarded() );
+        addHearts.onClick.AddListener(() => { LoadRewarded(true, true); });
+        watchAd.onClick.AddListener(() => { LoadRewarded(true, true); } );
+        watchRewardedTimer.onClick.AddListener(() => { LoadRewarded(false, true); } );
     }
-    public void LoadInterstitial()
-    {
-        if (_interstitialAd != null)
-        {
-            _interstitialAd.Destroy();
-            _interstitialAd = null;
-        }
 
-        InterstitialAd.Load(_InterstitialUnitId, new AdRequest(),
-          (InterstitialAd ad, LoadAdError error) =>
-          {
-              if (error != null || ad == null)
-                  return;
-              _interstitialAd = ad;
-          });
-    }
-    public void ShowInterstitial()
+    private void Update()
     {
-        if(_interstitialAd != null && _interstitialAd.CanShowAd())
-            _interstitialAd.Show();
-    }
-    public void LoadRewarded()
-    {
-        if (_rewardedAd != null)
+        if (adShown)
         {
-            _rewardedAd.Destroy();
-            _rewardedAd = null;
+            foreach (Button b in btns)
+                b.interactable = true;
+            adShown = false;
         }
-
+        if (adTimerShown)
+        {
+            timer.SetActive(true);
+            adTimerShown = false;
+        }
+    }
+    void DisableButtons()
+    {
+        foreach ( Button b in btns ) 
+            b.interactable = false;
+    }
+    public void LoadInterstitial(bool heart, bool rewarded)
+    {
+        DisableButtons();
+        InterstitialAd.Load(_InterstitialUnitId, new AdRequest(), (InterstitialAd ad, LoadAdError error) =>
+        {
+            if (error == null && ad != null && ad.CanShowAd())
+            {
+                if (rewarded)
+                    ad.OnAdFullScreenContentClosed += () => Reward(heart, rewarded);
+                ad.Show();
+            }
+            else
+                LoadRewarded(heart, rewarded);
+            adShown = true;
+        });
+    }
+    public void LoadRewarded(bool heart, bool rewarded)
+    {
+        DisableButtons();
         RewardedAd.Load(_RewardedUnitId, new AdRequest(),
           (RewardedAd ad, LoadAdError error) =>
           {
-              if (error != null || ad == null)
-              {
-                  LoadRewardedInterstitial();
-                  return;
-              }
-              _rewardedAd = ad;
+              if (error == null && ad != null && ad.CanShowAd())
+                  ad.Show((e) => Reward(heart, rewarded));
+              else
+                  LoadRewardedInterstitial(heart, rewarded);
+              adShown = true;
           });
     }
-    public void ShowRewarded(bool heart = true)
+    public void LoadRewardedInterstitial(bool heart, bool rewarded)
     {
-        if (!heart && LevelManager.level > 95)
-            if(adCounter > 10)
-                return;
-
-        if (_rewardedAd != null && _rewardedAd.CanShowAd()) 
-            _rewardedAd.Show((e) => 
-            {
-                Reward(heart);
-                LoadRewarded();
-            });
-        else if (_rewardedInterstitialAd != null && _rewardedInterstitialAd.CanShowAd())
-            _rewardedInterstitialAd.Show((e) =>
-            {
-                Reward(heart);
-                LoadRewarded();
-            });
-        else if (_interstitialAd != null && _interstitialAd.CanShowAd())
-        {
-            _interstitialAd.Show();
-            Reward(heart);
-            LoadRewarded();
-            LoadInterstitial();
-        }
-    }
-    public void LoadRewardedInterstitial()
-    {
-        if (_rewardedInterstitialAd != null)
-        {
-            _rewardedInterstitialAd.Destroy();
-            _rewardedInterstitialAd = null;
-        }
-
+        DisableButtons();
         RewardedInterstitialAd.Load(_RewardedInterstitialUnitId, new AdRequest(),
           (RewardedInterstitialAd ad, LoadAdError error) =>
           {
-              if (error != null || ad == null)
-              {
-                  LoadInterstitial();
-                  return;
-              }
-              _rewardedInterstitialAd = ad;
+              if (error == null && ad != null && ad.CanShowAd())
+                  ad.Show((e) => Reward(heart, rewarded));
+              else
+                  LoadInterstitial(heart, rewarded);
+              adShown = true;
           });
     }
-    void Reward(bool heart = true)
+    void Reward(bool heart, bool rewarded)
     {
+        if (!rewarded) return;
         if (heart)
-            levelManager.AddHeart();
+            LevelManager.trials++;
         else
         {
-            adCounter++;
-            timer.Activate();
-            timer.timeAllowed = TimeSpan.FromSeconds(15);
-            timer.startTime = DateTime.Now;
-            losePanel.SetActive(false);
+            adTimerShown = true;
+            Timer.watchedAdTimer = true;
         }
     }
 }

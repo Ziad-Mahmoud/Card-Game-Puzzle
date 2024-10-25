@@ -1,9 +1,14 @@
 using TMPro;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using static UnityEngine.PlayerPrefs;
+using static System.IO.File;
+using static UnityEngine.Random;
+using static UnityEngine.JsonUtility;
+using static UnityEngine.Application;
+using System.Collections;
 public class LevelManager : MonoBehaviour
 {
     public static UnityEvent win = new();
@@ -19,13 +24,20 @@ public class LevelManager : MonoBehaviour
     public static int level = 1;
     public static int trials = 5;
     public static bool firstStart = true;
+
+    static string path = string.Empty;
+    [Serializable]
+    public class Data
+    {
+        public int level;
+        public int trials;
+    }
     private void Awake()
     {
-        if (HasKey("level"))
-            level = GetInt("level");
+        if (path == string.Empty)
+            path = persistentDataPath + "/flipData.json";
+        Load();
         levelsText.text = "Level : " + level;
-        if (HasKey("trials"))
-            trials = GetInt("trials");
         trialsText.text = trials.ToString();
     }
     void Start()
@@ -39,6 +51,18 @@ public class LevelManager : MonoBehaviour
         if (!firstStart)
             startGame.onClick.Invoke();
         firstStart = false;
+        StopAllCoroutines();
+        StartCoroutine(SaveSystem());
+    }
+    IEnumerator SaveSystem()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+            Save();
+            trialsText.text = trials.ToString();
+            levelsText.text = "Level : " + level;
+        }
     }
     void WinHandlerDelayed()
     {
@@ -50,12 +74,12 @@ public class LevelManager : MonoBehaviour
         if (level == 100)
         {
             finishPanel.SetActive(true);
-            codeText.text = Random.Range(100000000, 999999999).ToString();
+            codeText.text = Range(100000000, 999999999).ToString();
         }
         else
             winPanel.SetActive(true);
         FindFirstObjectByType<Timer>().gameObject.SetActive(false);
-        adsManager.ShowInterstitial();
+        adsManager.LoadInterstitial(false, false);
     }
     void LoseHandler()
     {
@@ -63,13 +87,13 @@ public class LevelManager : MonoBehaviour
         Timer.gameEnd = true;
         soundManager.LoseSound();
         losePanel.SetActive(true);
-        adsManager.ShowInterstitial();
+        adsManager.LoadInterstitial(false,false);
     }
 
     void NextLevel()
     {
         level++;
-        SetInt("level",level);
+        Save();
         Retry();
     }
     public void Retry()
@@ -84,15 +108,18 @@ public class LevelManager : MonoBehaviour
             myReturn = true;
             trials--;
         }
-        SetInt("trials", trials);
-
         trialsText.text = trials.ToString();
         return myReturn;
     }
-    public void AddHeart()
+    public static void Save()
     {
-        trials++;
-        SetInt("trials", trials);
-        trialsText.text = trials.ToString();
+        WriteAllText(path, ToJson(new Data() { level = level, trials = trials}));
+    }
+    public static void Load()
+    {
+        if (!Exists(path)) return;
+        var data = FromJson<Data>(ReadAllText(path));
+        level = data.level;
+        trials = data.trials;
     }
 }
