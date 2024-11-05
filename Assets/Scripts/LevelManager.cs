@@ -15,10 +15,11 @@ public class LevelManager : MonoBehaviour
     public static UnityEvent lose = new();
 
     [SerializeField] Button startGame, retry, nextLevel;
-    [SerializeField] GameObject winPanel , losePanel, finishPanel;
+    [SerializeField] GameObject winPanel, losePanel, finishPanel, watchAdTimerBtn, watchAdTimerTxt;
     [SerializeField] TextMeshProUGUI trialsText, levelsText, codeText;
 
     [SerializeField] AdsManager adsManager;
+    [SerializeField] Timer timer;
     [SerializeField] SoundManager soundManager;
 
     public static int level = 1;
@@ -31,6 +32,7 @@ public class LevelManager : MonoBehaviour
     {
         public int level;
         public int trials;
+        public bool lastVersion = false;
     }
     private void Awake()
     {
@@ -74,7 +76,7 @@ public class LevelManager : MonoBehaviour
         if (level == 100)
         {
             finishPanel.SetActive(true);
-            codeText.text = Range(100000000, 999999999).ToString();
+            codeText.text = "Z" + Range(100000000, 999999999).ToString();
         }
         else
             winPanel.SetActive(true);
@@ -113,13 +115,15 @@ public class LevelManager : MonoBehaviour
     }
     public static void Save()
     {
-        WriteAllText(path, ToJson(new Data() { level = level, trials = trials}));
+        WriteAllText(path, ToJson(new Data() { level = level, trials = trials , lastVersion = true }));
     }
     public static void Load()
     {
         if (!Exists(path)) return;
         var data = FromJson<Data>(ReadAllText(path));
         level = data.level;
+        if (!data.lastVersion && level > 42)
+            level = 42;
         trials = data.trials;
     }
 }

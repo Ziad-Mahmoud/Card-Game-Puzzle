@@ -6,7 +6,7 @@ public class Timer : MonoBehaviour
     public TimeSpan timeAllowed;
     public DateTime startTime;
     TextMeshProUGUI timerText;
-    int adCounter = 0;
+    public int adCounter = 0;
     [SerializeField] GameObject losePanel;
     public static bool gameEnd = false;
     public static bool watchedAdTimer = false;
@@ -14,7 +14,7 @@ public class Timer : MonoBehaviour
     {
         timerText = GetComponent<TextMeshProUGUI>();
         gameEnd = false;
-        int levelTime = 9999;
+        int levelTime = 300;
         if (LevelManager.level < 11)
             levelTime = 60;
         else if (LevelManager.level < 21)
@@ -28,7 +28,7 @@ public class Timer : MonoBehaviour
     }
     void Update()
     {
-        if (watchedAdTimer && (adCounter < 10 || LevelManager.level < 96))
+        if (watchedAdTimer && (adCounter < 5 || LevelManager.level < 96))
         {
             adCounter++;
             Activate();

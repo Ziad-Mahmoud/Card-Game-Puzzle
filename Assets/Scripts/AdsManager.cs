@@ -9,10 +9,12 @@ public class AdsManager : MonoBehaviour
 
     [SerializeField] Button watchAd, watchRewardedTimer, addHearts;
     [SerializeField] GameObject timer;
+    [SerializeField] Timer myTimer;
     Button[] btns;
     public int adCounter = 1;
     bool adShown = false;
     bool adTimerShown = false;
+    int tryReload = 0;
     void Awake()
     {
         btns = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
@@ -46,12 +48,22 @@ public class AdsManager : MonoBehaviour
     }
     public void LoadInterstitial(bool heart, bool rewarded)
     {
+        if (tryReload < 10)
+            tryReload++;
+        else
+            return;
         DisableButtons();
+        if (myTimer.adCounter > 4 && LevelManager.level > 95 && !heart && rewarded)
+        {
+            Invoke(nameof(EnableBtns), 2);
+            return;
+        }
         InterstitialAd.Load(_InterstitialUnitId, new AdRequest(), (InterstitialAd ad, LoadAdError error) =>
         {
             if (error == null && ad != null && ad.CanShowAd())
             {
-                if (rewarded)
+                tryReload = 0;
+                if (rewarded) 
                     ad.OnAdFullScreenContentClosed += () => Reward(heart, rewarded);
                 ad.Show();
             }
@@ -60,14 +72,30 @@ public class AdsManager : MonoBehaviour
             adShown = true;
         });
     }
+    void EnableBtns()
+    {
+        adShown = true;
+    }
     public void LoadRewarded(bool heart, bool rewarded)
     {
+        if (tryReload < 10)
+            tryReload++;
+        else
+            return;
         DisableButtons();
+        if (myTimer.adCounter > 4 && LevelManager.level > 95 && !heart && rewarded)
+        {
+            Invoke(nameof(EnableBtns), 2);
+            return;
+        }
         RewardedAd.Load(_RewardedUnitId, new AdRequest(),
           (RewardedAd ad, LoadAdError error) =>
           {
               if (error == null && ad != null && ad.CanShowAd())
+              {
+                  tryReload = 0;
                   ad.Show((e) => Reward(heart, rewarded));
+              }
               else
                   LoadRewardedInterstitial(heart, rewarded);
               adShown = true;
@@ -75,12 +103,25 @@ public class AdsManager : MonoBehaviour
     }
     public void LoadRewardedInterstitial(bool heart, bool rewarded)
     {
+        if (tryReload < 10)
+            tryReload++;
+        else
+            return;
+
         DisableButtons();
+        if (myTimer.adCounter > 4 && LevelManager.level > 95 && !heart && rewarded)
+        {
+            Invoke(nameof(EnableBtns), 2);
+            return;
+        }
         RewardedInterstitialAd.Load(_RewardedInterstitialUnitId, new AdRequest(),
           (RewardedInterstitialAd ad, LoadAdError error) =>
           {
               if (error == null && ad != null && ad.CanShowAd())
+              {
+                  tryReload = 0;
                   ad.Show((e) => Reward(heart, rewarded));
+              }
               else
                   LoadInterstitial(heart, rewarded);
               adShown = true;
