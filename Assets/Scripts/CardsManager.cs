@@ -43,6 +43,8 @@ public class CardsManager : MonoBehaviour
         int cardsCount = LevelManager.level + 1;
         if (cardsCount > 49)
             cardsCount = 49;
+        if (LevelManager.level > 95)
+            cardsCount = 60;
         sprites = temp[..cardsCount];
         cardBack = Resources.Load<Sprite>("CardBack");
         cards = new Card[sprites.Length * 2];

@@ -14,13 +14,15 @@ public class CardsGroup : MonoBehaviour
     void Start()
     {
         var grid = GetComponent<GridLayoutGroup>();
-        int index = levels.Length - 1;
+        int index;
         if (LevelManager.level < 12)
             index = 0;
         else if (LevelManager.level < 25)
             index = 1;
-        else if (LevelManager.level < 49)
+        else if (LevelManager.level < 96)
             index = 2;
+        else
+            index = 3;
         var level = levels[index];
         grid.cellSize = level.cardSize;
         grid.spacing = level.spacing;

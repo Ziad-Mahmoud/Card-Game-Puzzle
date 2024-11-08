@@ -11,7 +11,6 @@ public class AdsManager : MonoBehaviour
     [SerializeField] GameObject timer;
     [SerializeField] Timer myTimer;
     Button[] btns;
-    public int adCounter = 1;
     bool adShown = false;
     bool adTimerShown = false;
     int tryReload = 0;
@@ -53,7 +52,7 @@ public class AdsManager : MonoBehaviour
         else
             return;
         DisableButtons();
-        if (myTimer.adCounter > 4 && LevelManager.level > 95 && !heart && rewarded)
+        if (myTimer.adCounter > 1 && LevelManager.level > 95 && !heart && rewarded)
         {
             Invoke(nameof(EnableBtns), 2);
             return;
@@ -83,7 +82,7 @@ public class AdsManager : MonoBehaviour
         else
             return;
         DisableButtons();
-        if (myTimer.adCounter > 4 && LevelManager.level > 95 && !heart && rewarded)
+        if (myTimer.adCounter > 1 && LevelManager.level > 95 && !heart && rewarded)
         {
             Invoke(nameof(EnableBtns), 2);
             return;
@@ -109,7 +108,7 @@ public class AdsManager : MonoBehaviour
             return;
 
         DisableButtons();
-        if (myTimer.adCounter > 4 && LevelManager.level > 95 && !heart && rewarded)
+        if (myTimer.adCounter > 1 && LevelManager.level > 95 && !heart && rewarded)
         {
             Invoke(nameof(EnableBtns), 2);
             return;

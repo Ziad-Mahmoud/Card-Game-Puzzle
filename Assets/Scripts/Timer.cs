@@ -14,7 +14,7 @@ public class Timer : MonoBehaviour
     {
         timerText = GetComponent<TextMeshProUGUI>();
         gameEnd = false;
-        int levelTime = 300;
+        int levelTime;
         if (LevelManager.level < 11)
             levelTime = 60;
         else if (LevelManager.level < 21)
@@ -23,12 +23,16 @@ public class Timer : MonoBehaviour
             levelTime = 200;
         else if (LevelManager.level < 41)
             levelTime = 250;
+        else if (LevelManager.level < 96)
+            levelTime = 300;
+        else
+            levelTime = 250;
         timeAllowed = TimeSpan.FromSeconds(levelTime) ;
         startTime = DateTime.Now;
     }
     void Update()
     {
-        if (watchedAdTimer && (adCounter < 5 || LevelManager.level < 96))
+        if (watchedAdTimer && (adCounter < 2 || LevelManager.level < 96))
         {
             adCounter++;
             Activate();

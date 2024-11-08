@@ -33,6 +33,7 @@ public class LevelManager : MonoBehaviour
         public int level;
         public int trials;
         public bool lastVersion = false;
+        public bool back5Levels = false;
     }
     private void Awake()
     {
@@ -76,7 +77,7 @@ public class LevelManager : MonoBehaviour
         if (level == 100)
         {
             finishPanel.SetActive(true);
-            codeText.text = "Z" + Range(100000000, 999999999).ToString();
+            codeText.text = "L" + Range(100000000, 999999999).ToString();
         }
         else
             winPanel.SetActive(true);
@@ -115,12 +116,14 @@ public class LevelManager : MonoBehaviour
     }
     public static void Save()
     {
-        WriteAllText(path, ToJson(new Data() { level = level, trials = trials , lastVersion = true }));
+        WriteAllText(path, ToJson(new Data() { level = level, trials = trials , lastVersion = true, back5Levels = true }));
     }
     public static void Load()
     {
         if (!Exists(path)) return;
         var data = FromJson<Data>(ReadAllText(path));
+        if (!data.back5Levels && data.level > 5)
+            data.level -= 5;
         level = data.level;
         if (!data.lastVersion && level > 42)
             level = 42;
