@@ -3,9 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 public class AdsManager : MonoBehaviour
 {
-    private readonly string _InterstitialUnitId = "ca-app-pub-4985704153931149/9141882130";
-    private readonly string _RewardedUnitId = "ca-app-pub-4985704153931149/4397592420";
-    private readonly string _RewardedInterstitialUnitId = "ca-app-pub-4985704153931149/1995726146";
+    private readonly string _InterstitialUnitId = "ca-app-pub-4985704153931149/4056373694";
+    private readonly string _RewardedUnitId = "ca-app-pub-4985704153931149/8676489999";
+    private readonly string _RewardedInterstitialUnitId = "ca-app-pub-4985704153931149/3288431943";
 
     [SerializeField] Button watchAd, watchRewardedTimer, addHearts;
     [SerializeField] GameObject timer;
