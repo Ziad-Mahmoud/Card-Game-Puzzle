@@ -1,0 +1,23 @@
+# ninja log v5
+32	19937	7854286609499537	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	61ad4c9b42470395
+150	2288	7854286432722468	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	d70f6b91861646ae
+76	19223	7854286602249806	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	be81bd67be3432ab
+89	19062	7854286600493569	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	8aca09a3b8f2459a
+2289	3383	7854286443311272	D:/GitHub/Card-Game-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/22l665m1/obj/arm64-v8a/libswappywrapper.so	19d06c1c7e8aa63a
+55	18950	7854286598917222	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	9d0f4541fd7f3116
+119	18861	7854286598598094	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	dd0da21a623fea52
+133	20043	7854286610593477	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	1c000dd8d809f67d
+66	19047	7854286600433857	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	45d9c648d46db151
+20044	20220	7854286612444752	D:/GitHub/Card-Game-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/22l665m1/obj/arm64-v8a/libgame.so	8487ca4b2851bcc5
+104	19785	7854286607967595	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	9299997e4a72233b
+192	786	7854299285690104	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	d70f6b91861646ae
+786	1184	7854299289217087	D:/GitHub/Card-Game-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/22l665m1/obj/arm64-v8a/libswappywrapper.so	19d06c1c7e8aa63a
+162	3273	7854299310331767	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	dd0da21a623fea52
+124	3304	7854299310571154	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	9d0f4541fd7f3116
+132	3401	7854299311518610	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	45d9c648d46db151
+141	3405	7854299311797851	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	8aca09a3b8f2459a
+9	3493	7854299312755279	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	be81bd67be3432ab
+176	3628	7854299314125591	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	1c000dd8d809f67d
+151	3904	7854299316904158	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	9299997e4a72233b
+30	4023	7854299318107155	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	61ad4c9b42470395
+4023	4152	7854299319461567	D:/GitHub/Card-Game-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/22l665m1/obj/arm64-v8a/libgame.so	8487ca4b2851bcc5

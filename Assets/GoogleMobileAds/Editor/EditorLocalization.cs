@@ -2,7 +2,6 @@ using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 namespace GoogleMobileAds.Editor
@@ -16,7 +15,7 @@ namespace GoogleMobileAds.Editor
     private const string LOCALIZATION_KEY_PREFIX = "KEY_";
 
     private readonly Lazy<EditorLocalizationData> _localizationData =
-      new(() => InitLocalizationDataOrThrow());
+      new Lazy<EditorLocalizationData>(() => InitLocalizationDataOrThrow());
     private EditorLocalizationData GetLocalizationData() => _localizationData.Value;
 
     /**
@@ -47,18 +46,27 @@ namespace GoogleMobileAds.Editor
       key = key.ToUpper();
       // Accept both key syntaxes.
       if (key.StartsWith(LOCALIZATION_KEY_PREFIX))
-        key = key.Replace(LOCALIZATION_KEY_PREFIX, "");
-#nullable enable
-      if (GetLocalizationData().LocalizationsByKey.TryGetValue(key, out Dictionary<string, string>? localizations))
+          key = key.Replace(LOCALIZATION_KEY_PREFIX, "");
+
+      if (GetLocalizationData().LocalizationsByKey.TryGetValue(key,
+          out Dictionary<string, string> localizations))
       {
-        // Key was found. Try to localize the key with the user language (e.g., "en" or "fr").
-        // Else, use the default (fallback) language, if the localization key is missing for
-        // the chosen language (or no language was selected).
-        // The region is omitted purposely as we don't currently require this level of details.
-        string userLanguage = GoogleMobileAdsSettings.LoadInstance().UserLanguage;
-        return localizations.TryGetValue(userLanguage, out string? localization) && !String.IsNullOrEmpty(localization) ? localization : localizations[GetDefaultLanguage()];
+          // Key was found. Try to localize the key with the user language (e.g., "en" or "fr").
+          // Else, use the default (fallback) language, if the localization key is missing for
+          // the chosen language (or no language was selected).
+          // The region is omitted purposely as we don't currently require this level of details.
+          string userLanguage = GoogleMobileAdsSettings.LoadInstance().UserLanguage;
+          if (localizations == null)
+          {
+            return null;
+          }
+          bool userLanguageExists = localizations.TryGetValue(userLanguage,
+                                                              out string userLocalization);
+          bool userLocalizationIsValid = userLanguageExists &&
+              !string.IsNullOrEmpty(userLocalization);
+          return userLocalizationIsValid ? userLocalization: localizations[GetDefaultLanguage()];
       }
-#nullable disable
+
       // Error, key not found, no localization to return so let's fallback to the key name
       // to provide some sort of indication in the UI.
       Debug.LogError($"Localization key not found: {key}.");
@@ -76,26 +84,27 @@ namespace GoogleMobileAds.Editor
         Path.Combine(Application.dataPath, LOCALIZATION_DATA_JSON_RELATIVE_PATH,
           LOCALIZATION_DATA_JSON_FILENAME);
       // Handle importing the localization data file via Unity Package Manager.
-      EditorPathUtils pathUtils = ScriptableObject.CreateInstance<EditorPathUtils>();
+      var pathUtils = ScriptableObject.CreateInstance<EditorPathUtils>();
       if (pathUtils.IsPackageRootPath())
       {
         localizationDataPath =
-          Path.Combine(pathUtils.GetDirectoryAssetPath(), LOCALIZATION_DATA_JSON_FILENAME);
+            Path.Combine(pathUtils.GetDirectoryAssetPath(), LOCALIZATION_DATA_JSON_FILENAME);
       }
       try
       {
         string json = File.ReadAllText(localizationDataPath);
-        EditorLocalizationData data = DeserializeFromJson(json);
+        var data = DeserializeFromJson(json);
         if (data.LocalizationsByKey == null)
         {
           throw new ArgumentNullException("LocalizationsByKey");
         }
         return data;
       }
-      catch (Exception ex)
+      catch (Exception)
       {
         throw new ArgumentException(
-          $"Exception thrown while retrieving localization data from {localizationDataPath}: {ex:full}");
+          $"Exception thrown while retrieving localization data from {localizationDataPath}:" +
+          " {ex:full}");
       }
     }
 
@@ -149,7 +158,8 @@ namespace GoogleMobileAds.Editor
       return data;
     }
 
-    private static void ProcessValue(EditorLocalizationData data, List<string> currentKeys, string val)
+    private static void ProcessValue(EditorLocalizationData data, List<string> currentKeys,
+                                     string val)
     {
       if (currentKeys.Count != 2)
         return;

@@ -22,7 +22,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] Timer timer;
     [SerializeField] SoundManager soundManager;
 
-    public static int level = 1;
+    public static int level = 96;
     public static int trials = 5;
     public static bool firstStart = true;
 
@@ -39,7 +39,7 @@ public class LevelManager : MonoBehaviour
     {
         if (path == string.Empty)
             path = persistentDataPath + "/flipData.json";
-        Load();
+        //Load();
         levelsText.text = "Level : " + level;
         trialsText.text = trials.ToString();
     }

@@ -3,9 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 public class AdsManager : MonoBehaviour
 {
-    private readonly string _InterstitialUnitId = "ca-app-pub-4985704153931149/9141882130";
-    private readonly string _RewardedUnitId = "ca-app-pub-4985704153931149/4397592420";
-    private readonly string _RewardedInterstitialUnitId = "ca-app-pub-4985704153931149/1995726146";
+    private readonly string _InterstitialUnitId = "ca-app-pub-4985704153931149/7814360118";
+    private readonly string _RewardedUnitId = "ca-app-pub-4985704153931149/3875115100";
+    private readonly string _RewardedInterstitialUnitId = "ca-app-pub-4985704153931149/6934616615";
 
     [SerializeField] Button watchAd, watchRewardedTimer, addHearts;
     [SerializeField] GameObject timer;
@@ -62,7 +62,7 @@ public class AdsManager : MonoBehaviour
             if (error == null && ad != null && ad.CanShowAd())
             {
                 tryReload = 0;
-                if (rewarded) 
+                if (rewarded)
                     ad.OnAdFullScreenContentClosed += () => Reward(heart, rewarded);
                 ad.Show();
             }
