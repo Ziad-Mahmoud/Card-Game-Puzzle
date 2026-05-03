@@ -271,8 +271,8 @@ PlayerSettings:
   AndroidAllowedArchitectures: -1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/Ziad/MatchTwo.keystore
-  AndroidKeyaliasName: ziad
+  AndroidKeystoreName: '{dedicated}: Downloads/user_Elsam.keystore'
+  AndroidKeyaliasName: eslam
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidEnableArm64MTE: 0
   AndroidBuildApkPerCpuArchitecture: 0
